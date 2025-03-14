@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import api from '../Api';
 
 const SignIn = () => {
   const [loading, setLoading] = useState(false);
@@ -11,33 +12,33 @@ const SignIn = () => {
     register,
     handleSubmit,
     reset,
-   
+
   } = useForm({
     defaultValues: {
-      userName: "",
+      email: "",
       password: "",
     },
     mode: "onTouched",
   });
 
   const onLoginHandler = async (data) => {
-    // try {
-    //   setLoading(true);
-    //   // const response = await api.post("/api/auth/public/signin", data);
-    //   if (response.status === 200) {
-    //     toast.success("Login Successful");
-    //     reset()
-    //     localStorage.setItem("JWT", response.data.jwtToken);
-    //     navigate("/home");
-    //   }
-    //   else {
-    //     toast.error("something went wrong!")
-    //   }
-    // } catch (error) {
-    //   toast.error("something went wrong!");
-    // } finally {
-    //   setLoading(false);
-    // }
+    try {
+      setLoading(true);
+      const response = await api.post("/auth/signin", data);
+      if (response.status === 200) {
+        toast.success("Login Successful");
+        reset()
+        localStorage.setItem("JWT", response.data.jwtToken);
+        navigate("/profile");
+      }
+      else {
+        toast.error("something went wrong!")
+      }
+    } catch (error) {
+      toast.error("something went wrong!");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -55,19 +56,20 @@ const SignIn = () => {
         <form className="mt-6 sm:mt-8 space-y-4 sm:space-y-6" onSubmit={handleSubmit(onLoginHandler)}>
           <div className="space-y-4">
             <div>
-              <label htmlFor="userName" className="block text-sm font-semibold text-gray-700">
-                UserName
+              <label htmlFor="email" className="block text-sm sm:text-base font-semibold text-gray-700">
+                Email
               </label>
               <input
-                id="userName"
-                name="userName"
-                type="text"
-                {...register("userName")}
-                
+                id="email"
+                message="*Email is required"
+                name="email"
+                type="email"
                 required
-                className="mt-1 block w-full px-3 py-2 sm:py-3 border border-gray-300 rounded-md shadow-sm
+                {...register("email")}
+               
+                className="mt-1 block w-full px-3 py-2 sm:py-3 border border-gray-300 rounded-md shadow-sm 
                 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 text-sm sm:text-base"
-                placeholder="john doe"
+                placeholder="john@example.com"
               />
             </div>
 
@@ -81,7 +83,7 @@ const SignIn = () => {
                 type="password"
                 required
                 {...register("password")}
-              
+
                 className="mt-1 block w-full px-3 py-2 sm:py-3 border border-gray-300 rounded-md shadow-sm
                 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 text-sm sm:text-base"
                 placeholder="********"

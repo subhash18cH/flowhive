@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, {useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import api from '../Api';
 
 const SignUp = () => {
   const [loading, setLoading] = useState(false);
@@ -15,7 +16,6 @@ const SignUp = () => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      userName: "",
       email: "",
       password: "",
     },
@@ -23,26 +23,25 @@ const SignUp = () => {
   });
 
   const onSubmitHandler = async (data) => {
-    const { userName, email, password } = data;
+    const {  email, password } = data;
     const sendData = {
-      userName,
       email,
       password,
     };
 
-    // try {
-    //   setLoading(true);
-    //   const response = await api.post("/api/auth/public/signup", sendData);
-    //   reset();
-    //   if (response.status === 200) {
-    //     toast.success("Reagister Successful");
-    //     navigate("/signin");
-    //   }
-    // } catch (error) {
-    //   toast.error("Something went wrong!")
-    // } finally {
-    //   setLoading(false);
-    // }
+    try {
+      setLoading(true);
+      const response = await api.post("/auth/signup", sendData);
+      reset();
+      if (response.status === 200) {
+        toast.success("Reagister Successful");
+        navigate("/signin");
+      }
+    } catch (error) {
+      toast.error("Something went wrong!")
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -59,24 +58,7 @@ const SignUp = () => {
 
         <form className="mt-6 sm:mt-8 space-y-4 sm:space-y-6" onSubmit={handleSubmit(onSubmitHandler)}>
           <div className="space-y-4">
-            <div>
-              <label htmlFor="userName" className="block text-sm sm:text-base font-semibold text-gray-700">
-                UserName
-              </label>
-              <input
-                id="userName"
-                name="userName"
-                type="text"
-                message="*UserName is required"
-                required
-                placeholder="John Doe"
-                {...register("userName")}
-                errors={errors}
-                className="mt-1 block w-full px-3 py-2 sm:py-3 border border-gray-300 rounded-md shadow-sm 
-                focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 text-sm sm:text-base"
-              />
-            </div>
-
+         
             <div>
               <label htmlFor="email" className="block text-sm sm:text-base font-semibold text-gray-700">
                 Email

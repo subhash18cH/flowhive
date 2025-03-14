@@ -101,15 +101,9 @@ const LandingPage = () => {
             <motion.div
               className="flex gap-4 sm:gap-6 lg:gap-8"
               animate={{
-                x: ["5%", "-100%"]
+                x: ["0%", "-100%"]
               }}
-              transition={{
-                x: {
-                  repeat: Infinity,
-                  duration: 20,
-                  ease: "linear",
-                },
-              }}
+              transition={{ ease: "linear", duration: 10, repeat: Infinity }}
             >
               <div className='flex shrink-0 gap-4 sm:gap-6'>
                 <ProfileCard
