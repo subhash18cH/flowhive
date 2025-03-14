@@ -1,29 +1,27 @@
-package com.subhash.fhbackend.model;
-
-import jakarta.persistence.*;
-import lombok.Data;
+package com.subhash.fhbackend.dto;
 
 import java.util.List;
 
-@Entity
-public class UserProfile {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class UserProfileDto {
 
     private String fullName;
     private String profession;
     private String about;
     private String availability;
     private String vision;
-
-    @ElementCollection
     private List<String> skills;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    public UserProfileDto(String fullName, List<String> skills, String vision, String availability, String about, String profession) {
+        this.fullName = fullName;
+        this.skills = skills;
+        this.vision = vision;
+        this.availability = availability;
+        this.about = about;
+        this.profession = profession;
+    }
+
+    public UserProfileDto() {
+    }
 
     public String getFullName() {
         return fullName;
@@ -71,13 +69,5 @@ public class UserProfile {
 
     public void setSkills(List<String> skills) {
         this.skills = skills;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }

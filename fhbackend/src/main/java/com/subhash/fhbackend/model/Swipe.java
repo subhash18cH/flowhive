@@ -1,10 +1,8 @@
 package com.subhash.fhbackend.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
 
 @Entity
-@Data
 public class Swipe {
 
     @Id
@@ -20,4 +18,30 @@ public class Swipe {
     private User toUser;
 
     private boolean isLiked;
+
+    public boolean isLiked() {
+        return isLiked;
+    }
+
+    public void setIsLiked(boolean liked) {
+        isLiked = liked;
+    }
+
+    public User getFromUser() {
+        return fromUser;
+    }
+
+    public void setFromUser(User fromUser) {
+        this.fromUser = fromUser;
+    }
+
+    public User getToUser() {
+        return toUser;
+    }
+
+    public void setToUser(User toUser) {
+        this.toUser = toUser;
+    }
+
+
 }
