@@ -36,9 +36,10 @@ public class SwipeController {
         if (targetUser == null) {
             return ResponseEntity.badRequest().body("User not found!");
         }
-        Swipe swipe = swipeService.saveSwipe(currentUser, targetUser, swipeRequest.isLiked());
+        System.out.println("islIked is"+swipeRequest.getIsLiked());
+        Swipe swipe = swipeService.saveSwipe(currentUser, targetUser, swipeRequest.getIsLiked());
 
-        if (swipeRequest.isLiked() && swipeService.isMutualLike(currentUser, targetUser)) {
+        if (swipeRequest.getIsLiked() && swipeService.isMutualLike(currentUser, targetUser)) {
             matchService.createMatch(currentUser, targetUser);
             return ResponseEntity.ok("It's a match!");
         }

@@ -12,11 +12,11 @@ public class SwipeService {
     @Autowired
     private SwipeRepository swipeRepository;
 
-    public Swipe saveSwipe(User currentUser, User targetUser, boolean liked) {
+    public Swipe saveSwipe(User currentUser, User targetUser, boolean isLiked) {
         Swipe swipe = new Swipe();
         swipe.setFromUser(currentUser);
         swipe.setToUser(targetUser);
-        swipe.setIsLiked(liked);
+        swipe.setLiked(isLiked);
         return swipeRepository.save(swipe);
     }
 

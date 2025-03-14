@@ -19,11 +19,11 @@ public class Swipe {
 
     private boolean isLiked;
 
-    public boolean isLiked() {
+    public Boolean getIsLiked() {
         return isLiked;
     }
 
-    public void setIsLiked(boolean liked) {
+    public void setLiked(boolean liked) {
         isLiked = liked;
     }
 
@@ -42,6 +42,5 @@ public class Swipe {
     public void setToUser(User toUser) {
         this.toUser = toUser;
     }
-
 
 }

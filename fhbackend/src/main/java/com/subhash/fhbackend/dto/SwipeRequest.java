@@ -1,6 +1,7 @@
 package com.subhash.fhbackend.dto;
 
 public class SwipeRequest {
+
     private Long targetUserId;
     private boolean isLiked;
 
@@ -12,7 +13,7 @@ public class SwipeRequest {
         this.targetUserId = targetUserId;
     }
 
-    public boolean isLiked() {
+    public boolean getIsLiked() {
         return isLiked;
     }
 
