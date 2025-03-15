@@ -55,16 +55,7 @@ public class UserProfileService {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(userProfileDtos);
     }
-    private UserProfileDto convertToDto(UserProfile userProfile) {
-        return new UserProfileDto(
-                userProfile.getFullName(),
-                userProfile.getSkills(),
-                userProfile.getVision(),
-                userProfile.getAvailability(),
-                userProfile.getAbout(),
-                userProfile.getProfession()
-        );
-    }
+
 
     public ResponseEntity<List<UserProfileDto>> getAllDevelopers() {
         List<UserProfile>developers=userProfileRepo.findByProfession("Developer");
@@ -80,5 +71,33 @@ public class UserProfileService {
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(marketerDtos );
+    }
+
+    public void deleteProfile(Long id) {
+        userRepo.deleteById(id);
+    }
+
+
+    public ResponseEntity<UserProfileDto> updateProfile(Long userId, UserProfileDto userProfileDto) {
+        UserProfile userProfile=userProfileRepo.findByUserId(userId).orElseThrow(()-> new RuntimeException("User Profile not found"));
+        userProfile.setFullName(userProfileDto.getFullName());
+        userProfile.setProfession(userProfileDto.getProfession());
+        userProfile.setAbout(userProfileDto.getAbout());
+        userProfile.setAvailability(userProfileDto.getAvailability());
+        userProfile.setVision(userProfileDto.getVision());
+        userProfile.setSkills(userProfileDto.getSkills());
+        UserProfile updatedProfile = userProfileRepo.save(userProfile);
+        return ResponseEntity.ok( convertToDto(updatedProfile));
+    }
+
+    private UserProfileDto convertToDto(UserProfile userProfile) {
+        return new UserProfileDto(
+                userProfile.getFullName(),
+                userProfile.getSkills(),
+                userProfile.getVision(),
+                userProfile.getAvailability(),
+                userProfile.getAbout(),
+                userProfile.getProfession()
+        );
     }
 }

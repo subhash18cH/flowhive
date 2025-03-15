@@ -15,4 +15,6 @@ public interface UserProfileRepo  extends JpaRepository<UserProfile,Long> {
     Optional<UserProfile> findByUserId(Long userId);
 
     List<UserProfile> findByProfession(String developer);
+
+    void deleteByFullName(String email);
 }
