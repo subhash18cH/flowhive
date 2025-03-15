@@ -1,12 +1,26 @@
 import React from 'react'
 import MySideBar from './MySideBar'
 import { useNavigate } from 'react-router-dom'
+import api from './Api';
+import toast from 'react-hot-toast';
 
 const Settings = () => {
+
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem("JWT")
     navigate("/")
+  }
+  const handleDelete = async () => {
+    try {
+      const respponse = await api.delete("/user/profile");
+      if (respponse.status === 200) {
+        toast.success("User Profile deleted successfully!")
+        navigate("/")
+      }
+    } catch (error) {
+      toast.error(error);
+    }
   }
   return (
     <>
@@ -22,7 +36,7 @@ const Settings = () => {
         </div>
         <div className='mt-16'>
           <h1 className='text-2xl text-red-600 font-semibold mb-2'>Danger Zone</h1>
-          <button className='text-red-600 text-xs'>Delete Account</button>
+          <button onClick={handleDelete} className='text-red-600 text-xs'>Delete Account</button>
         </div>
       </div>
     </>

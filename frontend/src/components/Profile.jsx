@@ -1,8 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import MySideBar from './MySideBar'
 import { Textarea } from './ui/textarea';
+import api from './Api';
+import toast from 'react-hot-toast';
 
 const Profile = () => {
+  const [loading, setLoading] = useState(false)
+  const [initialData, setInitialData] = useState(null);
   const [userData, setUserData] = useState({
     fullName: "",
     profession: "",
@@ -12,7 +16,7 @@ const Profile = () => {
     availability: ""
   });
   const availableSkills = [
-    "React", "Spring Boot", "Java", "Tailwind CSS", "MongoDB",
+    "brand", "docker", "Java", "Tailwind CSS", "MongoDB",
     "AWS", "Git",
   ];
   const toggleSkill = (skill) => {
@@ -23,10 +27,41 @@ const Profile = () => {
         : [...prev.skills, skill],
     }));
   };
-
-  const handleChanges=()=>{
-    
+  const getProfile = async () => {
+    setLoading(true)
+    try {
+      const response = await api.get("/user/profile");
+      if (response.status === 200) {
+        console.log("user profile", response.data)
+        setUserData(response.data);
+        setInitialData(response.data)
+      }
+    } catch (error) {
+      toast.error(error);
+    } finally {
+      setLoading(false)
+    }
   }
+
+  const handleChanges = async () => {
+    try {
+      const response = await api.put("/user/profile", userData);
+      if (response.status === 200) {
+        toast.success("profile updated successfully!")
+        setUserData(response.data);
+        setInitialData(response.data)
+      }
+    } catch (error) {
+      toast.error(error);
+    }
+  }
+  useEffect(() => {
+    getProfile()
+  }, [])
+
+  const isDataChanged = JSON.stringify(userData) !== JSON.stringify(initialData);
+
+
   return (
     <>
       <div>
@@ -40,7 +75,12 @@ const Profile = () => {
             <h1 className='text-2xl font-semibold'>Edit Your Profile</h1>
             <div className='flex flex-col mt-6 gap-2'>
               <label htmlFor="" className='ml-1'>Name</label>
-              <input type="text" placeholder='Name' className='border px-3 py-2 rounded-xl' />
+              <input
+                type="text"
+                value={userData.fullName}
+                onChange={(e) => setUserData({ ...userData, fullName: e.target.value })}
+                placeholder='Name'
+                className='border px-3 py-2 rounded-xl' />
             </div>
           </div>
 
@@ -63,7 +103,10 @@ const Profile = () => {
           <div className='mt-6 flex flex-col gap-2'>
             <h1>Description</h1>
             <div className='flex gap-6'>
-              <Textarea onChange={(e) => setUserData({ ...userData, about: e.target.value })} className="h-20 rounded-xl" placeholder="E.g. I'm a [role] with [X] years of experience in [main skills]. I specialize in [area] and have a track record of [achievement]. " />
+              <Textarea
+                value={userData.about}
+                onChange={(e) => setUserData({ ...userData, about: e.target.value })}
+                className="h-20 rounded-xl" placeholder="E.g. I'm a [role] with [X] years of experience in [main skills]. I specialize in [area] and have a track record of [achievement]. " />
             </div>
           </div>
 
@@ -101,7 +144,9 @@ const Profile = () => {
             <h1>Your Vision</h1>
             <div>
               <div className='flex gap-6 mt-9 '>
-                <Textarea onChange={(e) => setUserData({ ...userData, vision: e.target.value })} className="rounded-xl h-20" placeholder=" Goals: What specific impact do you want to make?
+                <Textarea
+                  value={userData.vision}
+                  onChange={(e) => setUserData({ ...userData, vision: e.target.value })} className="rounded-xl h-20" placeholder=" Goals: What specific impact do you want to make?
               
               " />
               </div>
@@ -109,7 +154,16 @@ const Profile = () => {
           </div>
 
           <div className='mt-6 flex justify-end'>
-            <button onClick={handleChanges} className='bg-yellow-400 hover:bg-yellow-300  p-2 rounded-xl'>Save changes</button>
+            <button
+              onClick={handleChanges}
+              disabled={!isDataChanged} // Disable if no changes
+              className={`p-2 rounded-xl ${isDataChanged
+                ? "bg-yellow-400 hover:bg-yellow-300"
+                : "bg-yellow-400 cursor-not-allowed"
+                }`}
+            >
+              Save changes
+            </button>
           </div>
         </div>
       </div>

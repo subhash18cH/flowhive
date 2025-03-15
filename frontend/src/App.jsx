@@ -10,12 +10,16 @@ import Profile from "./components/Profile"
 import Settings from "./components/Settings"
 import Matches from "./components/Matches"
 import Partner from "./components/Partner"
-
+import { Toaster } from "react-hot-toast";
 const App = () => {
   return (
     < >
 
       <BrowserRouter>
+        <Toaster
+          position="top-center"
+          reverseOrder={false}
+        />
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/signup" element={<SignUp />} />
