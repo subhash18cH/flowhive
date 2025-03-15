@@ -6,7 +6,11 @@ import com.subhash.fhbackend.model.UserProfile;
 import com.subhash.fhbackend.repository.UserProfileRepo;
 import com.subhash.fhbackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserProfileService {
@@ -42,5 +46,39 @@ public class UserProfileService {
         userProfileDto.setVision(userProfile.getVision());
         userProfileDto.setSkills(userProfile.getSkills());
         return userProfileDto;
+    }
+
+    public ResponseEntity<List<UserProfileDto>> getAllProfiles() {
+        List<UserProfile> userProfiles=userProfileRepo.findAll();
+        List<UserProfileDto> userProfileDtos = userProfiles.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(userProfileDtos);
+    }
+    private UserProfileDto convertToDto(UserProfile userProfile) {
+        return new UserProfileDto(
+                userProfile.getFullName(),
+                userProfile.getSkills(),
+                userProfile.getVision(),
+                userProfile.getAvailability(),
+                userProfile.getAbout(),
+                userProfile.getProfession()
+        );
+    }
+
+    public ResponseEntity<List<UserProfileDto>> getAllDevelopers() {
+        List<UserProfile>developers=userProfileRepo.findByProfession("Developer");
+        List<UserProfileDto> developerDtos  = developers.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(developerDtos);
+    }
+
+    public ResponseEntity<List<UserProfileDto>> getAllMarketers() {
+        List<UserProfile>marketers =userProfileRepo.findByProfession("Marketer");
+        List<UserProfileDto> marketerDtos   = marketers .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(marketerDtos );
     }
 }

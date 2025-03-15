@@ -29,7 +29,7 @@ const SignIn = () => {
         toast.success("Login Successful");
         reset()
         localStorage.setItem("JWT", response.data.jwtToken);
-        navigate("/profile");
+        navigate("/user-profile");
       }
       else {
         toast.error("something went wrong!")

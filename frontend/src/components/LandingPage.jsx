@@ -58,7 +58,7 @@ const LandingPage = () => {
             <h2 className='text-3xl sm:text-4xl lg:text-5xl font-bold px-4 mt-2'>
               Find your perfect partner within
             </h2>
-            <h2 className='text-3xl sm:text-4xl lg:text-5xl mt-3 bg-gradient-to-r from-yellow-400 to-yellow-500 text-white font-bold rounded-full pb-4 px-4'>
+            <h2 className='text-3xl sm:text-4xl lg:text-5xl mt-3 bg-gradient-to-r from-yellow-400 to-yellow-500 text-white font-bold rounded-full pb-4 px-4 py-2'>
               Swipes
             </h2>
           </div>
