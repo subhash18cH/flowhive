@@ -44,8 +44,6 @@ const LandingPage = () => {
   ];
   const navigate = useNavigate()
   const spec = ["Backend", "Frontend", "API's"];
-
-
   return (
     <>
       <Navbar />
@@ -64,7 +62,6 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* How it works */}
         <section id='how-it-works' className='mb-20'>
           <div className='flex gap-5 flex-col justify-center items-center'>
             <h2 className='text-3xl sm:text-4xl lg:text-5xl font-bold text-center'>
@@ -90,7 +87,6 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* Profile Cards */}
         <section id='partners' className='mb-20'>
           <div className='flex flex-col justify-center items-center mb-7'>
             <h1 className='text-2xl sm:text-3xl lg:text-4xl font-bold text-center px-4'>
@@ -129,7 +125,6 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* FAQ section */}
         <section id='FAQ' className='mb-20'>
           <div className='flex flex-col items-center justify-center'>
             <h1 className='text-2xl sm:text-3xl lg:text-4xl font-bold mb-6 text-center px-4'>
@@ -184,5 +179,4 @@ const LandingPage = () => {
     </>
   );
 };
-
 export default LandingPage;

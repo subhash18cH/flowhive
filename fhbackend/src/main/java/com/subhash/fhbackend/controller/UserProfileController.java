@@ -32,27 +32,52 @@ public class UserProfileController {
     }
 
     @GetMapping()
-    public ResponseEntity<UserProfileDto> getProfile( Principal principal) {
+    public ResponseEntity<?> getProfile( Principal principal) {
         User user=userService.findByEmail(principal.getName());
         Long userId=user.getId();
+        UserProfileDto profile = userProfileService.getProfile(userId);
+        if (profile == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("User profile not found");
+        }
         return ResponseEntity.ok(userProfileService.getProfile(userId));
     }
 
+    @GetMapping("/by-id")
+    public ResponseEntity<UserProfileDto>getProfileById(@RequestParam Long profileId){
+        return ResponseEntity.ok(userProfileService.getProfileById(profileId));
+
+    }
+
     @GetMapping("/developers")
-    public ResponseEntity<List<UserProfileDto>> getAllDevelopers(){
-        return userProfileService.getAllDevelopers();
+    public ResponseEntity<List<UserProfileDto>> getAllDevelopers(Principal principal){
+        User user=userService.findByEmail(principal.getName());
+        Long userId=user.getId();
+        return userProfileService.getAllDevelopers(userId);
     }
 
     @GetMapping("/marketers")
-    public ResponseEntity<List<UserProfileDto>> getAllMarketers(){
-        return userProfileService.getAllMarketers();
+    public ResponseEntity<List<UserProfileDto>> getAllMarketers(Principal principal){
+        User user=userService.findByEmail(principal.getName());
+        Long userId=user.getId();
+        return userProfileService.getAllMarketers(userId);
     }
 
     @DeleteMapping
-    public void deleteProfile(Principal principal){
-        User user=userService.findByEmail(principal.getName());
-        userProfileService.deleteProfile(user.getId());
+    public ResponseEntity<?> deleteProfile(Principal principal) {
+        User user = userService.findByEmail(principal.getName());
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("User not found");
+        }
+        try {
+            userProfileService.deleteProfile(user.getId());
+            return ResponseEntity.ok("User profile and related data deleted successfully");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
+
 
     @PutMapping
     public ResponseEntity<UserProfileDto> updateProfile( Principal principal,@RequestBody UserProfileDto userProfileDto) {

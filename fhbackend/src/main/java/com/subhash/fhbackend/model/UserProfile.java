@@ -3,6 +3,8 @@ package com.subhash.fhbackend.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -17,6 +19,7 @@ public class UserProfile {
     private String about;
     private String availability;
     private String vision;
+    private LocalDateTime joining;
 
     @ElementCollection
     private List<String> skills;
@@ -24,6 +27,14 @@ public class UserProfile {
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    public LocalDateTime getJoining() {
+        return joining;
+    }
+
+    public void setJoining(LocalDateTime joining) {
+        this.joining = joining;
+    }
 
     public String getFullName() {
         return fullName;

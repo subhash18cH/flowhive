@@ -27,19 +27,36 @@ const SignIn = () => {
       const response = await api.post("/auth/signin", data);
       if (response.status === 200) {
         toast.success("Login Successful");
-        reset()
-        localStorage.setItem("JWT", response.data.jwtToken);
-        navigate("/user-profile");
-      }
-      else {
-        toast.error("something went wrong!")
+        reset();
+        const jwtToken = response.data.jwtToken;
+        localStorage.setItem("JWT", jwtToken);
+        await checkUserProfile(); 
+      } else {
+        toast.error("Something went wrong!");
       }
     } catch (error) {
-      toast.error("something went wrong!");
+      toast.error(error);
     } finally {
       setLoading(false);
     }
   };
+
+  const checkUserProfile = async () => {
+    try {
+      const profileResponse = await api.get("/user/profile");
+      if (profileResponse.status === 200 && profileResponse.data) {
+        navigate("/partner");
+      } 
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        navigate("/user-profile");
+      } else {
+        toast.error("Something went wrong!");
+      }
+    }
+};
+
+
 
   return (
     <div className="min-h-screen  flex items-center justify-center p-4 sm:p-6 lg:p-8">
@@ -66,7 +83,7 @@ const SignIn = () => {
                 type="email"
                 required
                 {...register("email")}
-               
+
                 className="mt-1 block w-full px-3 py-2 sm:py-3 border border-gray-300 rounded-md shadow-sm 
                 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 text-sm sm:text-base"
                 placeholder="john@example.com"

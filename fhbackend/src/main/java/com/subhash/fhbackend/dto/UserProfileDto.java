@@ -1,5 +1,6 @@
 package com.subhash.fhbackend.dto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class UserProfileDto {
@@ -10,14 +11,34 @@ public class UserProfileDto {
     private String availability;
     private String vision;
     private List<String> skills;
+    private Long userId;
+    private LocalDateTime joining;
 
-    public UserProfileDto(String fullName, List<String> skills, String vision, String availability, String about, String profession) {
+    public LocalDateTime getJoining() {
+        return joining;
+    }
+
+    public void setJoining(LocalDateTime joining) {
+        this.joining = joining;
+    }
+
+    public UserProfileDto(String fullName, String profession, String about, String availability, String vision, List<String> skills, Long userId, LocalDateTime joining) {
         this.fullName = fullName;
-        this.skills = skills;
-        this.vision = vision;
-        this.availability = availability;
-        this.about = about;
         this.profession = profession;
+        this.about = about;
+        this.availability = availability;
+        this.vision = vision;
+        this.skills = skills;
+        this.userId = userId;
+        this.joining = joining;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public UserProfileDto() {

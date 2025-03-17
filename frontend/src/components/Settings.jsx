@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 const Settings = () => {
 
   const navigate = useNavigate();
+
   const handleLogout = () => {
     localStorage.removeItem("JWT")
     navigate("/")
@@ -16,6 +17,7 @@ const Settings = () => {
       const respponse = await api.delete("/user/profile");
       if (respponse.status === 200) {
         toast.success("User Profile deleted successfully!")
+        localStorage.removeItem("JWT")
         navigate("/")
       }
     } catch (error) {
@@ -28,16 +30,16 @@ const Settings = () => {
         <MySideBar />
       </div>
 
-      <div className=' w-full mt-20'>
+      <div className=' w-full mt-20 ml-52'>
         <h1 className='text-3xl font-bold'>Settings</h1>
         <div className='mt-8'>
           <h1 className='text-2xl font-semibold mb-10'>Account</h1>
           <button onClick={handleLogout} className='border px-4 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white'>Logout</button>
         </div>
-        <div className='mt-16'>
+        {/* <div className='mt-16'>
           <h1 className='text-2xl text-red-600 font-semibold mb-2'>Danger Zone</h1>
           <button onClick={handleDelete} className='text-red-600 text-xs'>Delete Account</button>
-        </div>
+        </div> */}
       </div>
     </>
   )

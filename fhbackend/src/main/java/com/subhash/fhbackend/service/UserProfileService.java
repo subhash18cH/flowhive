@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,10 +33,12 @@ public class UserProfileService {
         userProfile.setVision(profile.getVision());
         userProfile.setProfession(profile.getProfession());
         userProfile.setAvailability(profile.getAvailability());
+        userProfile.setJoining(LocalDateTime.now());
         userProfileRepo.save(userProfile);
     }
 
-    public UserProfileDto getProfile(Long userId) {
+    public UserProfileDto getProfile(Long userId)
+    {
         UserProfile userProfile= userProfileRepo.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("Profile not found"));
         UserProfileDto userProfileDto=new UserProfileDto();
@@ -45,6 +48,8 @@ public class UserProfileService {
         userProfileDto.setProfession(userProfile.getProfession());
         userProfileDto.setVision(userProfile.getVision());
         userProfileDto.setSkills(userProfile.getSkills());
+        userProfileDto.setUserId(userProfile.getUser().getId());
+        userProfileDto.setJoining(userProfile.getJoining());
         return userProfileDto;
     }
 
@@ -57,17 +62,21 @@ public class UserProfileService {
     }
 
 
-    public ResponseEntity<List<UserProfileDto>> getAllDevelopers() {
-        List<UserProfile>developers=userProfileRepo.findByProfession("Developer");
-        List<UserProfileDto> developerDtos  = developers.stream()
+    public ResponseEntity<List<UserProfileDto>> getAllDevelopers(Long userId) {
+        List<UserProfile>developers=userProfileRepo.findByProfession("Developer").stream()
+                .filter(userProfile->!userProfile.getUser().getId().equals(userId))
+                .collect(Collectors.toList());
+        List<UserProfileDto> developerDtos = developers.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(developerDtos);
     }
 
-    public ResponseEntity<List<UserProfileDto>> getAllMarketers() {
-        List<UserProfile>marketers =userProfileRepo.findByProfession("Marketer");
-        List<UserProfileDto> marketerDtos   = marketers .stream()
+    public ResponseEntity<List<UserProfileDto>> getAllMarketers(Long userId) {
+        List<UserProfile>marketers =userProfileRepo.findByProfession("Marketer").stream()
+                .filter(userProfile->!userProfile.getUser().getId().equals(userId))
+                .collect(Collectors.toList());
+        List<UserProfileDto> marketerDtos = marketers.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(marketerDtos );
@@ -93,11 +102,28 @@ public class UserProfileService {
     private UserProfileDto convertToDto(UserProfile userProfile) {
         return new UserProfileDto(
                 userProfile.getFullName(),
-                userProfile.getSkills(),
-                userProfile.getVision(),
-                userProfile.getAvailability(),
+                userProfile.getProfession(),
                 userProfile.getAbout(),
-                userProfile.getProfession()
+                userProfile.getAvailability(),
+                userProfile.getVision(),
+                userProfile.getSkills(),
+                userProfile.getUser().getId(),
+                userProfile.getJoining()
         );
+    }
+
+    public UserProfileDto getProfileById(Long profileId) {
+        UserProfile userProfile= userProfileRepo.findByUserId(profileId)
+                .orElseThrow(() -> new RuntimeException("Profile not found"));;
+        UserProfileDto userProfileDto=new UserProfileDto();
+        userProfileDto.setFullName(userProfile.getFullName());
+        userProfileDto.setAbout(userProfile.getAbout());
+        userProfileDto.setAvailability(userProfile.getAvailability());
+        userProfileDto.setProfession(userProfile.getProfession());
+        userProfileDto.setVision(userProfile.getVision());
+        userProfileDto.setSkills(userProfile.getSkills());
+        userProfileDto.setUserId(userProfile.getUser().getId());
+        userProfileDto.setJoining(userProfile.getJoining());
+        return userProfileDto;
     }
 }

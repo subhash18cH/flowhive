@@ -35,7 +35,7 @@ const UserProfile = () => {
     try {
       const response = await api.post("/user/profile/add-info", userData);
       if (response.status === 200) {
-        navigate("/home")
+        navigate("/partner")
       }
     } catch (error) {
       console.log(error);
@@ -63,12 +63,12 @@ const UserProfile = () => {
           <h2 className='text-3xl font-bold mb-4'>Your Profile</h2>
         </div>
 
-        <div className='flex justify-center mt-10'>
+        {/* <div className='flex justify-center mt-10'>
           <button className=' py-2 px-3 font-semibold  bg-yellow-400 rounded-full flex gap-3 items-center'>
             <FaRegEye />
             <span>Preview Profile</span>
           </button>
-        </div>
+        </div> */}
 
         {step == 1 && <div className='flex flex-col justify-center items-center mt-10'>
           <h1 className='text-2xl font-bold'>What's Your Name?*</h1>

@@ -3,7 +3,6 @@ import LandingPage from "./components/LandingPage"
 import SignUp from "./components/auth/SignUp"
 import SignIn from "./components/auth/SignIn"
 import UserProfile from "./components/UserProfile"
-import HomePage from "./components/HomePage"
 import ProtectedRoute from "./components/ProtectedRoute"
 import { SidebarProvider } from "@/components/ui/sidebar";
 import Profile from "./components/Profile"
@@ -11,6 +10,7 @@ import Settings from "./components/Settings"
 import Matches from "./components/Matches"
 import Partner from "./components/Partner"
 import { Toaster } from "react-hot-toast";
+import ClickedProfileInfo from "./components/ClickedProfileInfo"
 const App = () => {
   return (
     < >
@@ -23,7 +23,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/signup" element={<SignUp />} />
-          {<Route path="/signin" element={<SignIn />} />}
+          <Route path="/signin" element={<SignIn />} />
 
           <Route path="/user-profile" element={
             <ProtectedRoute>
@@ -31,14 +31,6 @@ const App = () => {
             </ProtectedRoute>
           } />
 
-
-          <Route path="/home" element={
-            <SidebarProvider>
-              <ProtectedRoute>
-                <HomePage />
-              </ProtectedRoute>
-            </SidebarProvider>
-          } />
           <Route path="/profile" element={
             <SidebarProvider>
               <ProtectedRoute>
@@ -64,6 +56,13 @@ const App = () => {
             <SidebarProvider>
               <ProtectedRoute>
                 <Partner />
+              </ProtectedRoute>
+            </SidebarProvider>
+          } />
+          <Route path="/p/:profile" element={
+            <SidebarProvider>
+              <ProtectedRoute>
+                <ClickedProfileInfo />
               </ProtectedRoute>
             </SidebarProvider>
           } />

@@ -1,19 +1,52 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { LuClock } from "react-icons/lu";
 import { BadgeCheck, Calendar } from 'lucide-react';
 import logo from "/src/assets/img.png"
+import { FaHeart } from "react-icons/fa";
+import api from './Api';
+import toast from 'react-hot-toast';
+const ProfileCard = ({ userId, name, role, about, vision, spec, avail }) => {
 
-const ProfileCard = ({ name, role, about, vision, spec, avail }) => {
+  const [swipedUsers, setSwipedUsers] = useState(new Set());
+  const token = localStorage.getItem("JWT")
+
+
+  const [swipe, setSwipe] = useState({
+    targetUserId: 0,
+    isLiked: false
+  });
+
   const roleColors = {
     Developer: "bg-blue-500",
     Marketer: "bg-yellow-400",
   };
+  const [loading, setLoading] = useState(false)
 
   const availability = {
     "Full-Time": <Calendar className="h-4 w-4" />,
     "Part-Time": <LuClock className="h-4 w-4" />
   };
- 
+
+  const handleClick = async () => {
+    if (swipedUsers.has(userId)) {
+      toast.error("You've already swiped on this user!");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const response = await api.post("/swipe", { targetUserId: userId, isLiked: true });
+
+      if (response.status === 200) {
+        toast.success("Request sent!");
+        setSwipedUsers((prev) => new Set(prev).add(userId));
+      }
+    } catch (error) {
+      toast.error(error.response?.data || "Error sending swipe request");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <section className="w-full max-w-xs sm:w-80 min-h-[400px] rounded-2xl p-4 sm:p-5 border-yellow-400 border-4 bg-white shadow-md mx-auto">
@@ -39,7 +72,6 @@ const ProfileCard = ({ name, role, about, vision, spec, avail }) => {
         </div>
       </div>
 
-      {/* Specializations */}
       <div className="flex flex-wrap gap-1.5 mb-4">
         {spec.map((item, index) => (
           <span
@@ -51,14 +83,12 @@ const ProfileCard = ({ name, role, about, vision, spec, avail }) => {
         ))}
       </div>
 
-      {/* About section */}
       <div className="mb-4">
         <p className="font-semibold text-xs sm:text-sm leading-relaxed line-clamp-3">
           {about}
         </p>
       </div>
 
-      {/* Availability */}
       <div className="flex items-center space-x-2 mb-4">
         <span className="text-gray-500 text-xs sm:text-sm">Availability</span>
         <div className="flex items-center space-x-1">
@@ -67,13 +97,23 @@ const ProfileCard = ({ name, role, about, vision, spec, avail }) => {
         </div>
       </div>
 
-      {/* Vision section */}
       <div className="flex-1">
         <p className="text-gray-500 text-xs sm:text-sm mb-2">My vision</p>
         <p className="text-xs sm:text-sm leading-relaxed line-clamp-4">
           {vision}
         </p>
       </div>
+      <div className="flex justify-center">
+        <button
+          onClick={handleClick}
+          disabled={!token}
+          className={`border-2 px-2 py-2 rounded-full border-pink-400 
+      ${!token ? 'opacity-50 cursor-not-allowed' : 'hover:bg-pink-200'}`}
+        >
+          <FaHeart className="text-red-500 text-xl" />
+        </button>
+      </div>
+
     </section>
   );
 };

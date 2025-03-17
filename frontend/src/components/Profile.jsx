@@ -15,6 +15,7 @@ const Profile = () => {
     skills: [],
     availability: ""
   });
+  
   const availableSkills = [
     "brand", "docker", "Java", "Tailwind CSS", "MongoDB",
     "AWS", "Git",
@@ -129,14 +130,14 @@ const Profile = () => {
           <div className='mt-6'>
             <h1>Availability</h1>
             <div className='flex flex-wrap gap-4 mt-6 justify-center items-center '>
-              <button onClick={() => setUserData({ ...userData, availability: "Part Time" })} className={` py-2 border px-4 rounded-2xl ${userData.availability === "Part Time"
+              <button onClick={() => setUserData({ ...userData, availability: "Part-Time" })} className={` py-2 border px-4 rounded-2xl ${userData.availability === "Part-Time"
                 ? "bg-yellow-400 "
                 : ""
-                }`}>Part Time</button>
-              <button onClick={() => setUserData({ ...userData, availability: "Full Time" })} className={` py-2  border px-4 rounded-2xl ${userData.availability === "Full Time"
+                }`}>Part-Time</button>
+              <button onClick={() => setUserData({ ...userData, availability: "Full-Time" })} className={` py-2  border px-4 rounded-2xl ${userData.availability === "Full-Time"
                 ? "bg-yellow-400 "
                 : ""
-                }`}>Full Time</button>
+                }`}>Full-Time</button>
             </div>
           </div>
 
@@ -156,7 +157,7 @@ const Profile = () => {
           <div className='mt-6 flex justify-end'>
             <button
               onClick={handleChanges}
-              disabled={!isDataChanged} // Disable if no changes
+              disabled={!isDataChanged}
               className={`p-2 rounded-xl ${isDataChanged
                 ? "bg-yellow-400 hover:bg-yellow-300"
                 : "bg-yellow-400 cursor-not-allowed"
